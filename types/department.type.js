@@ -1,5 +1,5 @@
 const gnx = require('@simtlix/gnx');
-const graphql= require('graphql');
+const graphql = require('graphql');
 const { AuditableObjectFields } = require('./extended/auditableGraphQLObjectType');
 
 const {
@@ -20,7 +20,7 @@ const {
 const DepartmentType = new GraphQLObjectType({
     name: 'DepartmentType',
     description: 'Reprensent department',
-    extensions:{
+    extensions: {
         validations: {
             CREATE: [ValidateNameDepartment],
             UPDATE: [ValidateNameDepartment],
@@ -30,13 +30,13 @@ const DepartmentType = new GraphQLObjectType({
             ]
         }
     },
-    fields: () => Object.assign(AuditableObjectFields,{
-        id: {type: GraphQLNonNull(GraphQLID)},
-        name: {type: GraphQLNonNull(GraphQLString)}
+    fields: () => Object.assign(AuditableObjectFields, {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLNonNull(GraphQLString) }
     })
 })
 
 
 
-gnx.connect(Department,DepartmentType,'department','departments');
+gnx.connect(Department, DepartmentType, 'department', 'departments');
 module.exports = DepartmentType
