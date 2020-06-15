@@ -10,6 +10,7 @@ const {
     GraphQLObjectType
 } = graphql;
 
+// Data Charge
 const Department = require('../models/departments');
 const {
     ValidateNameDepartment,
@@ -17,6 +18,7 @@ const {
     CantDeleteDepartmentWithDeptManager
 } = require('../validators/department.validator');
 
+// type graphql object
 const DepartmentType = new GraphQLObjectType({
     name: 'DepartmentType',
     description: 'Reprensent department',

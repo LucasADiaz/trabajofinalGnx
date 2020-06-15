@@ -1,5 +1,5 @@
 const gnx = require('@simtlix/gnx');
-const graphql= require('graphql');
+const graphql = require('graphql');
 const { AuditableObjectFields } = require('./extended/auditableGraphQLObjectType');
 
 const {
@@ -10,24 +10,25 @@ const {
     GraphQLObjectType
 } = graphql;
 
+// Data Charge
 const Employee = require('../models/employees');
 const Salary = require('../models/salaries');
 const EmployeeType = require('./employee.type');
 const {
     ValidateDateInterval
 } = require('../validators/salary.validator');
-
+// type graphql object
 const SalaryType = new GraphQLObjectType({
     name: 'SalaryType',
     description: 'Represent salary assigned to an employee',
-    extensions : {
+    extensions: {
         validations: {
             CREATE: [ValidateDateInterval],
             UPDATE: [ValidateDateInterval]
         }
     },
-    fields: () => Object.assign(AuditableObjectFields,{
-        id: {type: GraphQLID},
+    fields: () => Object.assign(AuditableObjectFields, {
+        id: { type: GraphQLID },
         employee: {
             type: EmployeeType,
             extensions: {
@@ -36,18 +37,15 @@ const SalaryType = new GraphQLObjectType({
                     embedded: true
                 }
             },
-            resolve(parent, args){
+            resolve(parent, args) {
                 return Employee.findById(parent.EmployeeID)
             }
         },
-        salary: {type: GraphQLNonNull(GraphQLFloat)},
-        from_date: {type: GraphQLString},
-        to_date: {type: GraphQLString} 
+        salary: { type: GraphQLNonNull(GraphQLFloat) },
+        from_date: { type: GraphQLString },
+        to_date: { type: GraphQLString }
     })
 });
 
-gnx.connect(Salary,SalaryType,'salary','salaries');
+gnx.connect(Salary, SalaryType, 'salary', 'salaries');
 module.exports = SalaryType;
-
-
-

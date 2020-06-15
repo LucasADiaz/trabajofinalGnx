@@ -1,5 +1,5 @@
 const gnx = require('@simtlix/gnx');
-const graphql= require('graphql');
+const graphql = require('graphql');
 const { AuditableObjectFields } = require('./extended/auditableGraphQLObjectType');
 
 const {
@@ -10,6 +10,7 @@ const {
     GraphQLID,
 } = graphql;
 
+// Data Charge
 const Employee = require('../models/employees');
 const GenderEnumType = require('./enum/gender.enum');
 const {
@@ -20,13 +21,13 @@ const {
     CantDeleteEmployeeWithTitle,
     CantDeleteEmployeeWithDeptManager
 } = require('../validators/employee.validator')
-
+    // type graphql object
 const EmployeeType = new GraphQLObjectType({
-    name:'EmployeeType',
+    name: 'EmployeeType',
     description: 'Represent Employee',
     extensions: {
         validations: {
-            CREATE : [ValidateDni,ValidateAge],
+            CREATE: [ValidateDni, ValidateAge],
             UPDATE: [ValidateAge],
             DELETE: [
                 CantDeleteEmployeeWithDeptEmployee,
@@ -36,16 +37,16 @@ const EmployeeType = new GraphQLObjectType({
             ]
         }
     },
-    fields: () => Object.assign(AuditableObjectFields,{
-        id: {type: GraphQLNonNull(GraphQLID)},
-        dni: {type: GraphQLNonNull(GraphQLString)},
-        first_name: {type: GraphQLNonNull(GraphQLString)},
-        last_name: {type: GraphQLNonNull(GraphQLString)},
-        gender: {type: GraphQLNonNull(GenderEnumType)},
-        birth_date: {type: GraphQLNonNull(GraphQLString)},
-        hire_date: {type: GraphQLString}
+    fields: () => Object.assign(AuditableObjectFields, {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        dni: { type: GraphQLNonNull(GraphQLString) },
+        first_name: { type: GraphQLNonNull(GraphQLString) },
+        last_name: { type: GraphQLNonNull(GraphQLString) },
+        gender: { type: GraphQLNonNull(GenderEnumType) },
+        birth_date: { type: GraphQLNonNull(GraphQLString) },
+        hire_date: { type: GraphQLString }
     })
 });
 
-gnx.connect(Employee,EmployeeType,'employee','employess');
+gnx.connect(Employee, EmployeeType, 'employee', 'employess');
 module.exports = EmployeeType;

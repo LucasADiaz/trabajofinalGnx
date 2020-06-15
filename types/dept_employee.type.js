@@ -1,5 +1,5 @@
 const gnx = require('@simtlix/gnx');
-const graphql= require('graphql');
+const graphql = require('graphql');
 const { AuditableObjectFields } = require('./extended/auditableGraphQLObjectType');
 
 const {
@@ -10,8 +10,9 @@ const {
     GraphQLObjectType
 } = graphql;
 
-const Dept_employee = require('../models/dept_employee');
+// Data Charge
 const Employee = require('../models/employees');
+const Dept_employee = require('../models/dept_employee');
 const Department = require('../models/departments');
 const DepartmentType = require('./department.type');
 const EmployeeType = require('./employee.type');
@@ -19,7 +20,7 @@ const EmployeeType = require('./employee.type');
 const {
     ValidateDeptEmployeeDateInterval
 } = require('../validators/dept_employee.validator');
-
+// type graphql object
 const Dept_employeeType = new GraphQLObjectType({
     name: 'DepartmentEmployeeType',
     description: 'Represent the employee of a department',
@@ -29,8 +30,8 @@ const Dept_employeeType = new GraphQLObjectType({
             UPDATE: [ValidateDeptEmployeeDateInterval]
         }
     },
-    fields: () => Object.assign(AuditableObjectFields,{
-        id: {type: GraphQLNonNull(GraphQLID)},
+    fields: () => Object.assign(AuditableObjectFields, {
+        id: { type: GraphQLNonNull(GraphQLID) },
         employee: {
             type: EmployeeType,
             extensions: {
@@ -39,27 +40,26 @@ const Dept_employeeType = new GraphQLObjectType({
                     embedded: true
                 }
             },
-            resolve(parent, args){
+            resolve(parent, args) {
                 return Employee.findById(parent.EmployeeID)
             }
         },
         department: {
             type: DepartmentType,
-            extensions:{
+            extensions: {
                 relation: {
                     connectionField: 'DepartmentID',
                     embedded: true
                 }
             },
-            resolve(parent,args){
+            resolve(parent, args) {
                 return Department.findById(parent.DepartmentID)
             }
         },
-        from_date: {type: GraphQLString},
-        to_date: {type: GraphQLString} 
+        from_date: { type: GraphQLString },
+        to_date: { type: GraphQLString }
     })
 });
 
-gnx.connect(Dept_employee,Dept_employeeType,'dept_employee','depts_employee');
+gnx.connect(Dept_employee, Dept_employeeType, 'dept_employee', 'depts_employee');
 module.exports = Dept_employeeType;
-

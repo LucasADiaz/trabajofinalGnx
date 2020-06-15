@@ -1,5 +1,5 @@
 const gnx = require('@simtlix/gnx');
-const graphql= require('graphql');
+const graphql = require('graphql');
 const { AuditableObjectFields } = require('./extended/auditableGraphQLObjectType');
 
 const {
@@ -10,12 +10,13 @@ const {
     GraphQLObjectType
 } = graphql;
 
+// Data Charge
 const Title = require('../models/titles');
 const EmployeeType = require('./employee.type');
 const {
     ValidateTitleDateInterval
 } = require('../validators/title.validator');
-
+// type graphql object
 const TitleType = new GraphQLObjectType({
     name: 'TitleType',
     description: 'Represent title assigned to an employee',
@@ -25,9 +26,9 @@ const TitleType = new GraphQLObjectType({
             UPDATE: [ValidateTitleDateInterval]
         }
     },
-    fields: () => Object.assign(AuditableObjectFields,{
-        id: {type: GraphQLNonNull(GraphQLID)},
-        employee : {
+    fields: () => Object.assign(AuditableObjectFields, {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        employee: {
             type: EmployeeType,
             extensions: {
                 relation: {
@@ -35,15 +36,15 @@ const TitleType = new GraphQLObjectType({
                     embedded: true
                 }
             },
-            resolve(parent, args){
+            resolve(parent, args) {
                 return Employee.findById(parent.EmployeeID)
             }
         },
-        title: {type: GraphQLNonNull(GraphQLString)},
-        from_date: {type: GraphQLString},
-        to_date: {type: GraphQLString}
+        title: { type: GraphQLNonNull(GraphQLString) },
+        from_date: { type: GraphQLString },
+        to_date: { type: GraphQLString }
     })
 });
 
-gnx.connect(Title,TitleType,'title','titles');
+gnx.connect(Title, TitleType, 'title', 'titles');
 module.exports = TitleType;
