@@ -1,7 +1,3 @@
-
-
-# Data
-data/
-
-# modules from node
 node_modules
+.DS_Store
+data/
